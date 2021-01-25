@@ -1,3 +1,4 @@
+# coding=utf-8
 import telebot
 from ImageProcessing import *
 import os
@@ -14,7 +15,8 @@ def startPrivet(message):
 
 
 @bot.message_handler(content_types=['document'])
-def handle(message):
+def handleDoc(message):
+    print(message.chat.id)
     save_dir = os.getcwd()
     file_name = message.document.file_name
     file_id = message.document.file_name
@@ -28,7 +30,29 @@ def handle(message):
     url = image_processing(file_name)
     with open(url, 'rb') as doc:
         bot.send_document(message.chat.id, doc)
-        
+##332467990
+@bot.message_handler(content_types=['photo'])
+def handleImg(message):
+    file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+    file_name = file_info.file_path
+    file_name = file_name[file_name.rindex('/')+1:]
+    file_name = message.from_user.username + file_name
+    print(file_name)
+    src = save_file + "/" + file_name
+    with open(src, 'wb') as new_file:
+        new_file.write(downloaded_file)
+    bot.reply_to(message, 'Ещё немного...')
+    url = image_processing(file_name)
+    print(file_name)
+    with open(url, 'rb') as doc:
+        bot.send_document(message.chat.id, doc)
 
-
-bot.polling()
+print('start bot')
+bot.polling(none_stop=True, timeout=100)
+##bot.infinity_polling(True)
+##while True:
+##    try:
+##        bot.polling()
+##    except:
+##        print('restart')
