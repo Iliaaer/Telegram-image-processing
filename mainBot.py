@@ -3,7 +3,7 @@ import telebot
 from ImageProcessing import *
 import os
 
-TOKEN = '1484122424:AAGgsvY7sh9RrLiRUFcvoGmtMIoBsm3t0Rg'
+TOKEN = ''
 
 bot = telebot.TeleBot(TOKEN)
 bot_alias = '@' + bot.get_me().username
